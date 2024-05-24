@@ -5,6 +5,7 @@ import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
 
 const Menu = styled.div`
+  position: relative;
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -30,14 +31,15 @@ const StyledToggle = styled.button`
 `;
 
 const StyledList = styled.ul`
-  position: fixed;
+  position: absolute;
+  z-index: 1;
 
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
   border-radius: var(--border-radius-md);
 
-  right: ${(props) => props.position.x}px;
-  top: ${(props) => props.position.y}px;
+  right: ${(props) => props.$position.x}px;
+  top: ${(props) => props.$position.y}px;
 `;
 
 const StyledButton = styled.button`
@@ -87,9 +89,10 @@ function Toggle({ id }) {
 
   function handleClick(e) {
     const rect = e.target.closest("button").getBoundingClientRect();
+
     setPosition({
-      x: window.innerWidth - rect.width - rect.x,
-      y: rect.y + rect.height + 8,
+      x: -8,
+      y: rect.height,
     });
 
     openId === "" || openId !== id ? open(id) : close();
@@ -103,16 +106,10 @@ function Toggle({ id }) {
 }
 
 function List({ id, children }) {
-  const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close);
+  const { openId, position } = useContext(MenusContext);
 
   if (openId !== id) return null;
-  return createPortal(
-    <StyledList position={position} ref={ref}>
-      {children}
-    </StyledList>,
-    document.body
-  );
+  return <StyledList $position={position}>{children}</StyledList>;
 }
 
 function Button({ children, icon, onClick }) {
