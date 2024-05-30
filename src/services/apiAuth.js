@@ -12,7 +12,23 @@ export async function signup({ fullName, email, password }) {
     },
   });
 
-  if (error) throw new Error(error.message);
+  let authError = null;
+
+  // Signup with existing email, Supabase return a fake user object. See https://supabase.com/docs/reference/javascript/auth-signup
+  if (data?.user && !data.user?.identities.length) {
+    authError = {
+      name: "AuthApiError",
+      message: "This email has already been registered",
+    };
+  } else if (error) {
+    authError = {
+      name: error.name,
+      message: error.message,
+    };
+  }
+
+  if (authError) throw new Error(authError.message);
+
   return data;
 }
 
