@@ -1,4 +1,7 @@
 import styled from "styled-components";
+import { useRecentBookings } from "./useRecentBookings";
+import { useRecentStays } from "./useRecentStays";
+import Spinner from "../../ui/Spinner";
 
 const StyledDashboardLayout = styled.div`
   display: grid;
@@ -6,3 +9,21 @@ const StyledDashboardLayout = styled.div`
   grid-template-rows: auto 34rem auto;
   gap: 2.4rem;
 `;
+
+function DashboardLayout() {
+  const { bookings, isLoading: isLoading1 } = useRecentBookings();
+  const { stays, confirmedStays, isLoading: isLoading2 } = useRecentStays();
+
+  if (isLoading1 || isLoading2) return <Spinner />;
+
+  return (
+    <StyledDashboardLayout>
+      <div>Statistics</div>
+      <div>Activity</div>
+      <div>Chart</div>
+      <div>sales</div>
+    </StyledDashboardLayout>
+  );
+}
+
+export default DashboardLayout;
