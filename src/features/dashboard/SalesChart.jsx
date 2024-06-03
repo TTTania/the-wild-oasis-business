@@ -49,7 +49,7 @@ function SalesChart({ bookings, numDays }) {
     end: new Date(),
   });
 
-  const date = allDates.map((date) => {
+  const data = allDates.map((date) => {
     return {
       label: format(date, "MMM dd"),
       totalSales: bookings
@@ -83,9 +83,9 @@ function SalesChart({ bookings, numDays }) {
       </Heading>
 
       <ResponsiveContainer height={300} width="100%">
-        <AreaChart data={date}>
+        <AreaChart data={data}>
           <XAxis
-            datakey="label"
+            dataKey="label"
             tick={{ fill: colors.text }}
             tickLine={{ stroke: colors.text }}
           />
