@@ -115,10 +115,42 @@ const startDataDark = [
 ];
 
 function prepareData(startData, stays) {
-  // A bit ugly code, but sometimes this is what it takes when working with real data 😅
+  //this function prepares the startData array based on the stays array and returns a refined startData array.
 
-  function incArrayValue(arr, field) {
-    return arr.map((obj) =>
+  function checkIsInRange(from, to, number) {
+    return from <= number && to >= number;
+    //the function checks if the number is between from and to, returns a boolean
+  }
+
+  function incArrayValue(arr, nights) {
+    //for each stay, incArrayValue loops over every element in startData(arr) and update the related value in startData in return.
+
+    //A. for each element in startData(arr), the map function finds out the value of from and to
+    return arr.map((obj) => {
+      const [from, to = from] = obj.duration.replace(/[^0-9-]/g, "").split("-");
+      //1. [^0-9-]: Matches any character that is not (0-9) or (-).
+      //2. /.../g: Flags the regular expression for global search and replacement.
+      //3. after split, we get two numbers, first one assigned to "from", second one assigned to "to; if we only got one number then to = from as default
+
+      //B. find out which duration this stay.numNights fall in
+      const isInRange = checkIsInRange(from, to, nights);
+
+      //C. update matched duration value
+      return isInRange ? { ...obj, value: obj.value + 1 } : obj;
+    });
+  }
+
+  const data = stays
+    .reduce((arr, cur) => incArrayValue(arr, cur.numNights), startData)
+    //arr in reduce is the accumulator that collects the updated startData after each iteration,
+    //arr is passed to incArrayValue for increment(value +1)
+    .filter((obj) => obj.value > 0);
+
+  return data;
+}
+
+/*
+  // A bit ugly code, but sometimes this is what it takes when working with real data 😅
       obj.duration === field ? { ...obj, value: obj.value + 1 } : obj
     );
   }
@@ -137,9 +169,7 @@ function prepareData(startData, stays) {
       return arr;
     }, startData)
     .filter((obj) => obj.value > 0);
-
-  return data;
-}
+*/
 
 function DurationChart({ confirmedStays }) {
   const { isDarkMode } = useDarkMode();
