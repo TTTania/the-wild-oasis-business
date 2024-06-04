@@ -32,6 +32,7 @@ const StyledToggle = styled.button`
 
 const StyledList = styled.ul`
   position: absolute;
+  z-index: 999;
 
   background-color: var(--color-grey-0);
   box-shadow: var(--shadow-md);
@@ -109,7 +110,9 @@ function Toggle({ id }) {
 
 function List({ id, children }) {
   const { openId, position, close } = useContext(MenusContext);
-  const ref = useOutsideClick(close, true);
+  const ref = useOutsideClick(() => {
+    close();
+  }, false);
 
   if (openId !== id) return null;
 
