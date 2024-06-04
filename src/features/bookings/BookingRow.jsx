@@ -132,7 +132,11 @@ function BookingRow({
           <ConfirmDelete
             resourceName="booking"
             disabled={isDeleting}
-            onConfirm={() => deleteBooking(bookingId)}
+            onConfirm={() =>
+              deleteBooking(bookingId, {
+                onSettled: () => navigate(`/bookings`),
+              })
+            }
           />
         </Modal.Window>
       </Modal>
