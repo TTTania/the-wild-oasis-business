@@ -43,11 +43,6 @@ function BookingDetail() {
     "checked-out": "silver",
   };
 
-  function handleDelete(bookingId) {
-    deleteBooking(bookingId);
-    navigate(`/bookings`);
-  }
-
   return (
     <>
       <Row type="horizontal">

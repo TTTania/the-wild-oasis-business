@@ -49,7 +49,6 @@ const Amount = styled.div`
 function BookingRow({
   booking: {
     id: bookingId,
-    created_at,
     startDate,
     endDate,
     numNights,
