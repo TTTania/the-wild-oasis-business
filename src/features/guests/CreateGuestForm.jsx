@@ -3,16 +3,20 @@ import Form from "../../ui/Form";
 import Button from "../../ui/Button";
 import FormRow from "../../ui/FormRow";
 import Spinner from "../../ui/Spinner";
+import Select from "../../ui/Select";
 import { useCountries } from "../../hooks/useCountries";
 import { useCreateGuest } from "./useCreateGuest";
-
 import { Controller, useForm } from "react-hook-form";
 import toast from "react-hot-toast";
-import Select from "../../ui/Select";
+import { useUpdateGuest } from "./useUpdateGuest";
 
-function CreateCabinForm({ onCloseModal }) {
+function CreateGuestForm({ guestToUpdate = {}, onCloseModal }) {
   const { isCreating, createGuest } = useCreateGuest();
-  const { countries, isLoading: isLoadingCountries } = useCountries();
+  const { isUpdating, updateGuest } = useUpdateGuest();
+  const isWorking = isCreating || isUpdating;
+
+  const { id: updateId, ...updateValues } = guestToUpdate;
+  const isUpdateSession = Boolean(updateId);
 
   const {
     register,
@@ -20,7 +24,11 @@ function CreateCabinForm({ onCloseModal }) {
     reset,
     control,
     formState: { errors },
-  } = useForm();
+  } = useForm({
+    defaultValues: isUpdateSession ? updateValues : {},
+  });
+
+  const { countries, isLoading: isLoadingCountries } = useCountries();
 
   if (isLoadingCountries) {
     return <Spinner />;
@@ -43,20 +51,28 @@ function CreateCabinForm({ onCloseModal }) {
       (country) => country.label === data.nationality
     )?.flagUrl;
 
-    const finalData = {
-      ...data,
-      countryFlag,
-    };
-
-    console.log(finalData);
-
-    createGuest(finalData, {
-      onSuccess: () => {
-        toast.success(`A new guest was created`);
-        reset();
-        onCloseModal?.();
-      },
-    });
+    if (isUpdateSession) {
+      updateGuest(
+        { editGuestData: data, id: updateId },
+        {
+          onSuccess: () => {
+            reset();
+            onCloseModal?.();
+          },
+        }
+      );
+    } else {
+      createGuest(
+        { ...data, countryFlag },
+        {
+          onSuccess: () => {
+            toast.success(`A new guest was created`);
+            reset();
+            onCloseModal?.();
+          },
+        }
+      );
+    }
   }
 
   function onError(errors) {
@@ -68,11 +84,15 @@ function CreateCabinForm({ onCloseModal }) {
       onSubmit={handleSubmit(onSubmit, onError)}
       type={onCloseModal ? "modal" : "regular"}
     >
+      <FormRow label="id">
+        <Input disabled value={updateId} />
+      </FormRow>
+
       <FormRow label="Full name" error={errors?.fullName?.message}>
         <Input
           type="text"
           id="fullName"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register("fullName", { required: "This field is required" })}
         />
       </FormRow>
@@ -81,7 +101,7 @@ function CreateCabinForm({ onCloseModal }) {
         <Input
           type="text"
           id="email"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register("email", {
             required: "This field is required",
             pattern: {
@@ -96,7 +116,7 @@ function CreateCabinForm({ onCloseModal }) {
         <Input
           type="text"
           id="nationalID"
-          disabled={isCreating}
+          disabled={isWorking}
           {...register("nationalID", {
             required: "This field is required",
           })}
@@ -111,7 +131,7 @@ function CreateCabinForm({ onCloseModal }) {
             <Select
               {...field}
               options={countriesOptionsNationality}
-              disabled={isCreating}
+              disabled={isWorking}
               {...register("nationality", {
                 required: "This field is required",
               })}
@@ -125,17 +145,17 @@ function CreateCabinForm({ onCloseModal }) {
         <Button
           variation="secondary"
           type="reset"
-          disabled={isCreating}
+          disabled={isWorking}
           onClick={() => onCloseModal?.()}
         >
           Cancel
         </Button>
-        <Button disabled={isCreating} type="submit">
-          Create new guest
+        <Button disabled={isWorking} type="submit">
+          {isUpdateSession ? "Update Guest" : "Create new guest"}
         </Button>
       </FormRow>
     </Form>
   );
 }
 
-export default CreateCabinForm;
+export default CreateGuestForm;

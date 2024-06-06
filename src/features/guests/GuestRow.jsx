@@ -82,7 +82,7 @@ function GuestRow({ guest }) {
               </Menus.List>
 
               <Modal.Window name="edit-guest">
-                <CreateGuestForm />
+                <CreateGuestForm guestToUpdate={guest} />
               </Modal.Window>
             </Menus.Menu>
             <Modal.Window name="delete">
