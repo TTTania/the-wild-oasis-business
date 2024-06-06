@@ -1,3 +1,4 @@
+import React from "react";
 import styled from "styled-components";
 
 const StyledSelect = styled.select`
@@ -14,16 +15,32 @@ const StyledSelect = styled.select`
   box-shadow: var(--shadow-sm);
 `;
 
-function Select({ options, value, onChange, ...props }) {
-  return (
-    <StyledSelect value={value} onChange={onChange} {...props}>
-      {options.map((option) => (
-        <option key={option.value} value={option.value}>
+// function Select({ options, value, onChange, key, ...props }) {
+//   return (
+//     <StyledSelect value={value} onChange={onChange} {...props}>
+//       {options.map((option) => (
+//         <option key={key} value={option.value}>
+//           {option.label}
+//         </option>
+//       ))}
+//     </StyledSelect>
+//   );
+// }
+
+// export default Select;
+
+const Select = React.forwardRef(
+  ({ options, value, onChange, ...props }, ref) => (
+    <StyledSelect ref={ref} value={value} onChange={onChange} {...props}>
+      {options.map((option, index) => (
+        <option key={`${option.value}-${index}`} value={option.value}>
           {option.label}
         </option>
       ))}
     </StyledSelect>
-  );
-}
+  )
+);
+
+Select.displayName = "Select";
 
 export default Select;

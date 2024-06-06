@@ -19,6 +19,6 @@ export function useGuests() {
     queryKey: ["guests", page],
     queryFn: () => getGuests({ page }),
   });
-  console.log(count);
+
   return { isLoading, error, guests, count };
 }

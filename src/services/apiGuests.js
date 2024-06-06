@@ -31,3 +31,28 @@ export async function getGuests({ page }) {
     });
   }
   */
+
+export async function createGuest(newGuest) {
+  const { data, error } = await supabase
+    .from("guests")
+    .insert([{ ...newGuest }])
+    .select();
+
+  if (error) throw new Error("Guest could not be created");
+
+  return data;
+}
+
+export async function updateGuest(id, newGuestData) {
+  const { data, error } = await supabase
+    .from("guests")
+    .update(newGuestData)
+    .eq("id", id)
+    .select();
+
+  if (error) {
+    console.error(error);
+    throw new Error("Guest could not be updated");
+  }
+  return data;
+}

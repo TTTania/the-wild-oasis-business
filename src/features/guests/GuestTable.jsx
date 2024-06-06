@@ -14,7 +14,7 @@ function GuestTable() {
   if (error) throw new Error("Couldn't load guests");
 
   if (!guests.length) return <Empty resourceName="guests" />;
-  console.log(guests);
+
   return (
     <Menus>
       <Table columns="0.6fr 1.2fr 1.4fr 1.1fr 1.2fr 0.1fr 0.5fr">
