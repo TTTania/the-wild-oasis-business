@@ -4,6 +4,9 @@ import Modal from "../../ui/Modal";
 import Menus from "../../ui/Menus";
 import { HiPencil, HiTrash } from "react-icons/hi2";
 import { Flag } from "../../ui/Flag";
+import ConfirmDelete from "../../ui/ConfirmDelete";
+import CreateGuestForm from "./CreateGuestForm";
+import { useDeleteGuest } from "./useDeleteGuest";
 
 const Guest = styled.div`
   font-size: 1.6rem;
@@ -28,6 +31,8 @@ const Number = styled.div`
 `;
 
 function GuestRow({ guest }) {
+  const { deleteGuest, isDeleting } = useDeleteGuest();
+
   const {
     id: guestId,
     fullName,
@@ -63,6 +68,32 @@ function GuestRow({ guest }) {
             <Flag src={countryFlag} alt={`Flag of ${nationality}`} />
           )}
         </Stacked>
+        <div>
+          <Modal>
+            <Menus.Menu>
+              <Menus.Toggle id={guestId} />
+              <Menus.List id={guestId}>
+                <Modal.Open opens="edit-guest">
+                  <Menus.Button icon={<HiPencil />}>Edit</Menus.Button>
+                </Modal.Open>
+                <Modal.Open opens="delete">
+                  <Menus.Button icon={<HiTrash />}>Delete</Menus.Button>
+                </Modal.Open>
+              </Menus.List>
+
+              <Modal.Window name="edit-guest">
+                <CreateGuestForm />
+              </Modal.Window>
+            </Menus.Menu>
+            <Modal.Window name="delete">
+              <ConfirmDelete
+                resourceName="guest"
+                disabled={isDeleting}
+                onConfirm={() => deleteGuest(guestId)}
+              />
+            </Modal.Window>
+          </Modal>
+        </div>
       </Table.Row>
     </>
   );
