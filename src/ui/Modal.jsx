@@ -3,17 +3,43 @@ import { createPortal } from "react-dom";
 import { HiXMark } from "react-icons/hi2";
 import styled from "styled-components";
 import { useOutsideClick } from "../hooks/useOutsideClick";
+import { motion } from "framer-motion";
 
-const StyledModal = styled.div`
+const modalVariants = {
+  hidden: {
+    y: "-100dvh",
+
+    opacity: 0,
+  },
+  visible: {
+    y: "0",
+
+    opacity: 1,
+    transition: {
+      duration: 4,
+      type: "spring",
+      damping: 20,
+      stiffness: 300,
+    },
+  },
+  exit: {
+    y: "100vh",
+    opacity: 0,
+  },
+};
+
+const StyledModal = styled(motion.div)`
   position: fixed;
-  top: 50%;
-  left: 50%;
+  top: 10dvh;
+  left: 30dvw;
+  max-width: max-content;
+  z-index: 100;
   transform: translate(-50%, -50%);
   background-color: var(--color-grey-0);
   border-radius: var(--border-radius-lg);
   box-shadow: var(--shadow-lg);
   padding: 3.2rem 4rem;
-  transition: all 0.5s;
+  /* transition: all 0.5s; */
   height: 70vh;
   overflow: scroll;
 `;
@@ -27,7 +53,7 @@ const Overlay = styled.div`
   background-color: var(--backdrop-color);
   backdrop-filter: blur(4px);
   z-index: 1000;
-  transition: all 0.5s;
+  transition: all 0.3s;
 `;
 
 const Button = styled.button`
@@ -87,7 +113,14 @@ function Window({ children, name }) {
   if (name !== openName) return null;
   return createPortal(
     <Overlay>
-      <StyledModal ref={ref}>
+      <StyledModal
+        ref={ref}
+        initial="hidden"
+        animate="visible"
+        exit="exit"
+        variants={modalVariants}
+        transition={{ duration: 0.8 }}
+      >
         <Button onClick={close}>
           <HiXMark />
         </Button>
