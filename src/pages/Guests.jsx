@@ -1,5 +1,5 @@
 import AddGuest from "../features/guests/AddGuest";
-import GuestTable from "../features/guests/guestTable";
+import GuestTable from "../features/guests/GuestTable";
 import Heading from "../ui/Heading";
 import Row from "../ui/Row";
 
