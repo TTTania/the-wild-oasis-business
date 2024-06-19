@@ -8,18 +8,23 @@ import {
   HiOutlineUserGroup,
   HiOutlineUsers,
 } from "react-icons/hi2";
+import { screenSizes } from "../utils/constants";
 
 const NavList = styled.ul`
   display: flex;
   flex-direction: column;
   gap: 0.8rem;
+
+  @media (max-width: ${screenSizes.laptop}) {
+    flex-direction: row;
+    justify-content: space-between;
+  }
 `;
 
 const StyledNavLink = styled(NavLink)`
   &:link,
   &:visited {
     display: flex;
-    align-items: center;
     gap: 1.2rem;
 
     color: var(--color-grey-600);
@@ -27,6 +32,13 @@ const StyledNavLink = styled(NavLink)`
     font-weight: 500;
     padding: 1.2rem 2.4rem;
     transition: all 0.3s;
+
+    @media (max-width: ${screenSizes.laptop}) {
+      padding: 1.2rem 1rem;
+    }
+    @media (max-width: ${screenSizes.mobile}) {
+      padding: 0;
+    }
   }
 
   /* This works because react-router places the active class on the active NavLink */
@@ -54,46 +66,58 @@ const StyledNavLink = styled(NavLink)`
   }
 `;
 
+const StyledSpan = styled.span`
+  @media (max-width: ${screenSizes.tablet}) {
+    display: none;
+  }
+`;
+
+const StyledLi = styled.li`
+  @media (max-width: ${screenSizes.laptop}) {
+    padding: 1.2rem 1rem;
+  }
+`;
+
 function MainNav() {
   return (
     <div>
       <NavList>
-        <li>
+        <StyledLi>
           <StyledNavLink to="/dashboard">
             <HiOutlineHome />
-            <span>Home</span>
+            <StyledSpan>Home</StyledSpan>
           </StyledNavLink>
-        </li>
-        <li>
+        </StyledLi>
+        <StyledLi>
           <StyledNavLink to="/bookings">
             <HiOutlineCalendarDays />
-            <span>Bookings</span>
+            <StyledSpan>Bookings</StyledSpan>
           </StyledNavLink>
-        </li>
-        <li>
+        </StyledLi>
+        <StyledLi>
           <StyledNavLink to="/cabins">
             <HiOutlineHomeModern />
-            <span>Cabins</span>
+            <StyledSpan>Cabins</StyledSpan>
           </StyledNavLink>
-        </li>
-        <li>
+        </StyledLi>
+        <StyledLi>
           <StyledNavLink to="/guests">
             <HiOutlineUserGroup />
-            <span>Guests</span>
+            <StyledSpan>Guests</StyledSpan>
           </StyledNavLink>
-        </li>
-        <li>
+        </StyledLi>
+        <StyledLi>
           <StyledNavLink to="/users">
             <HiOutlineUsers />
-            <span>Users</span>
+            <StyledSpan>Users</StyledSpan>
           </StyledNavLink>
-        </li>
-        <li>
+        </StyledLi>
+        <StyledLi>
           <StyledNavLink to="/settings">
             <HiOutlineCog6Tooth />
-            <span>Settings</span>
+            <StyledSpan>Settings</StyledSpan>
           </StyledNavLink>
-        </li>
+        </StyledLi>
       </NavList>
     </div>
   );

@@ -1,8 +1,13 @@
 import styled from "styled-components";
 import { useDarkMode } from "../context/DarkModeContext";
+import { screenSizes } from "../utils/constants";
 
 const StyledLogo = styled.div`
   text-align: center;
+
+  @media (max-width: ${screenSizes.laptop}) {
+    display: none;
+  }
 `;
 
 const Img = styled.img`

@@ -2,18 +2,24 @@ import { Outlet } from "react-router-dom";
 import Sidebar from "./Sidebar";
 import Header from "./Header";
 import styled from "styled-components";
+import { screenSizes } from "../utils/constants";
 
 const StyledAppLayout = styled.div`
-  display: grid;
-  grid-template-columns: 26rem 1fr;
-  grid-template-rows: auto 1fr;
-  height: 100vh;
+  min-height: 100vh;
+  margin-top: 6rem;
+  transition: all 0.5s;
+  transition: ease-in-out 0.35s;
+
+  @media (min-width: ${screenSizes.tablet}) {
+    display: flex;
+  }
 `;
 
 const Main = styled.main`
   background-color: var(--color-grey-50);
   padding: 4rem 4.8rem 6.4rem;
   overflow: scroll;
+  width: 100%;
 `;
 
 const Container = styled.div`
