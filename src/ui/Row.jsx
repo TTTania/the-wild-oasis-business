@@ -1,4 +1,5 @@
 import styled, { css } from "styled-components";
+import { screenSizes } from "../utils/constants";
 
 const Row = styled.div`
   display: flex;
@@ -8,6 +9,17 @@ const Row = styled.div`
     css`
       justify-content: space-between;
       align-items: center;
+
+      @media (max-width: ${screenSizes.laptop}) {
+        min-width: 88rem;
+      }
+
+      @media (max-width: ${screenSizes.tablet}) {
+        flex-direction: column;
+        gap: 0.8rem;
+
+        min-width: 30rem;
+      }
     `}
 
   ${(props) =>

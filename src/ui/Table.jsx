@@ -1,5 +1,6 @@
 import { createContext, useContext } from "react";
 import styled from "styled-components";
+import { screenSizes } from "../utils/constants";
 
 const StyledTable = styled.div`
   border: 1px solid var(--color-grey-200);
@@ -7,6 +8,7 @@ const StyledTable = styled.div`
   font-size: 1.4rem;
   background-color: var(--color-grey-0);
   border-radius: 7px;
+  overflow: scroll;
 `;
 
 const CommonRow = styled.div`
@@ -15,17 +17,49 @@ const CommonRow = styled.div`
   column-gap: 2.4rem;
   align-items: center;
   transition: none;
+
+  &:nth-child(odd) {
+    background-color: var(--color-grey-0);
+  }
+
+  &:nth-child(even) {
+    background-color: var(--color-grey-50);
+  }
+
+  .not-important-mobile {
+    &.important {
+      display: block;
+    }
+
+    @media (max-width: ${screenSizes.tablet}) {
+      &:not(.important) {
+        display: none;
+      }
+    }
+  }
+
+  @media (max-width: ${screenSizes.tablet}) {
+    grid-template-columns: ${(props) => props.mobilecolumns};
+    row-gap: 1rem;
+  }
 `;
 
 const StyledHeader = styled(CommonRow)`
   padding: 1.6rem 2.4rem;
-
   background-color: var(--color-grey-50);
   border-bottom: 1px solid var(--color-grey-100);
   text-transform: uppercase;
   letter-spacing: 0.4px;
   font-weight: 600;
   color: var(--color-grey-600);
+
+  &:nth-child(odd) {
+    background-color: var(--color-grey-100);
+  }
+
+  @media (max-width: ${screenSizes.tablet}) {
+    display: none;
+  }
 `;
 
 const StyledRow = styled(CommonRow)`
@@ -34,10 +68,14 @@ const StyledRow = styled(CommonRow)`
   &:not(:last-child) {
     border-bottom: 1px solid var(--color-grey-100);
   }
+
+  @media (max-width: ${screenSizes.tablet}) {
+    padding: 3rem 4rem 2.4rem;
+  }
 `;
 
 const StyledBody = styled.section`
-  margin: 0.4rem 0;
+  margin: 0rem 0;
 `;
 
 const Footer = styled.footer`
@@ -61,27 +99,33 @@ const Empty = styled.p`
 
 const TableContext = createContext();
 
-function Table({ columns, children }) {
+function Table({ columns, mobilecolumns, children }) {
+  mobilecolumns = "1fr";
   return (
-    <TableContext.Provider value={{ columns }}>
+    <TableContext.Provider value={{ columns, mobilecolumns }}>
       <StyledTable role="table">{children}</StyledTable>
     </TableContext.Provider>
   );
 }
 
 function Header({ children }) {
-  const { columns } = useContext(TableContext);
+  const { columns, mobilecolumns } = useContext(TableContext);
   return (
-    <StyledHeader role="row" columns={columns} as="header">
+    <StyledHeader
+      role="row"
+      columns={columns}
+      mobilecolumns={mobilecolumns}
+      as="header"
+    >
       {children}
     </StyledHeader>
   );
 }
 
 function Row({ children }) {
-  const { columns } = useContext(TableContext);
+  const { columns, mobilecolumns } = useContext(TableContext);
   return (
-    <StyledRow role="row" columns={columns}>
+    <StyledRow role="row" columns={columns} mobilecolumns={mobilecolumns}>
       {children}
     </StyledRow>
   );
