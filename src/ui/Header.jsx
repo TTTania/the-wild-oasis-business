@@ -18,7 +18,7 @@ const StyledHeader = styled.header`
   box-shadow: var(--shadow-sm);
 
   @media (max-width: ${screenSizes.tablet}) {
-    padding: 0.6rem 2.4rem;
+    padding: 1rem 2.4rem;
   }
 `;
 

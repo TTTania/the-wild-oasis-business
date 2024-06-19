@@ -6,7 +6,7 @@ import { screenSizes } from "../utils/constants";
 
 const StyledAppLayout = styled.div`
   min-height: 100vh;
-  margin-top: 6rem;
+  margin-top: 5.5rem;
   transition: all 0.5s;
   transition: ease-in-out 0.35s;
 
@@ -20,6 +20,7 @@ const Main = styled.main`
   padding: 4rem 4.8rem 6.4rem;
   overflow: scroll;
   width: 100%;
+  height: 100vh;
 `;
 
 const Container = styled.div`
