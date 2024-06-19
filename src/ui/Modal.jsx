@@ -29,9 +29,9 @@ const modalVariants = {
 };
 
 const StyledModal = styled(motion.div)`
-  position: fixed;
-  top: 10dvh;
-  left: 30dvw;
+  /* position: fixed; */
+  /* top: 10dvh; */
+  /* left: 30dvw; */
   max-width: max-content;
   z-index: 100;
   transform: translate(-50%, -50%);
@@ -40,7 +40,7 @@ const StyledModal = styled(motion.div)`
   box-shadow: var(--shadow-lg);
   padding: 3.2rem 4rem;
   /* transition: all 0.5s; */
-  height: 70vh;
+  max-height: 85%;
   overflow: scroll;
 `;
 
@@ -54,6 +54,9 @@ const Overlay = styled.div`
   backdrop-filter: blur(4px);
   z-index: 1000;
   transition: all 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 
 const Button = styled.button`
