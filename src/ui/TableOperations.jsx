@@ -6,7 +6,7 @@ const TableOperations = styled.div`
   align-items: center;
   gap: 1.6rem;
 
-  @media (max-width: ${screenSizes.tablet}) {
+  @media (max-width: ${screenSizes.laptop}) {
     flex-direction: column;
     gap: 0.8rem;
     width: 10rem;

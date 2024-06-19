@@ -10,10 +10,6 @@ const Row = styled.div`
       justify-content: space-between;
       align-items: center;
 
-      @media (max-width: ${screenSizes.laptop}) {
-        min-width: 88rem;
-      }
-
       @media (max-width: ${screenSizes.tablet}) {
         flex-direction: column;
         gap: 0.8rem;
