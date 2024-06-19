@@ -34,7 +34,7 @@ const StyledNavLink = styled(NavLink)`
     transition: all 0.3s;
 
     @media (max-width: ${screenSizes.laptop}) {
-      padding: 1.2rem 1rem;
+      padding: 0.6rem;
     }
     @media (max-width: ${screenSizes.mobile}) {
       padding: 0;
