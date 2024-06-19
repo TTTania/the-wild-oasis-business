@@ -5,6 +5,7 @@ import Row from "../../ui/Row";
 import { useTodayActivity } from "./useTodayActivity";
 import Spinner from "../../ui/Spinner";
 import TodayItem from "./TodayItem";
+import { screenSizes } from "../../utils/constants";
 
 const StyledToday = styled.div`
   /* Box */
@@ -18,6 +19,15 @@ const StyledToday = styled.div`
   gap: 2.4rem;
   grid-column: 1 / span 2;
   padding-top: 2.4rem;
+
+  justify-content: center;
+
+  @media (max-width: ${screenSizes.tablet}) {
+    width: 85dvw;
+    align-self: center;
+    padding: 1.2rem;
+    overflow-x: auto;
+  }
 `;
 
 const TodayList = styled.ul`
