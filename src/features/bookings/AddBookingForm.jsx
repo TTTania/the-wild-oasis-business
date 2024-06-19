@@ -19,7 +19,7 @@ import {
   startOfToday,
 } from "date-fns";
 import { useGetBookedDaysByCabin } from "./useGetBookedDaysByCabin";
-import { modifiersStylesDatePicker } from "../../utils/constants";
+import { modifiersStylesDatePicker, windowSizes } from "../../utils/constants";
 import FooterDatePicker from "../../ui/FooterDatePicker";
 import { formatCurrency, subtractDates } from "../../utils/helpers";
 import { useSettings } from "../settings/useSettings";
@@ -32,9 +32,11 @@ import ButtonGroup from "../../ui/ButtonGroup";
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useCreateBooking } from "./useCreateBooking";
+import { useWindowSize } from "../../hooks/useWindowSize";
 
 function AddBookingForm() {
   const navigate = useNavigate();
+  const { width } = useWindowSize();
 
   const {
     register,
@@ -280,166 +282,326 @@ function AddBookingForm() {
   }
 
   return (
-    <Form $type="modal" onSubmit={handleSubmit(onSubmit, onError)}>
-      <FormRow label="Cabin">
-        <Controller
-          name="cabinId"
-          control={control}
-          rules={bookingValidation.cabinId}
-          render={({ field }) => <Select {...field} options={cabinOptions} />}
-        />
-      </FormRow>
-
-      <FormRow flex="datepicker" label="Booking dates">
-        <Controller
-          name="startDate"
-          id="startDate"
-          rules={bookingValidation.startDate}
-          control={control}
-          render={({ field }) => <input {...field} type="hidden" />}
-        />
-        <Controller
-          name="endDate"
-          id="endDate"
-          rules={bookingValidation.endDate}
-          control={control}
-          render={({ field }) => <input {...field} type="hidden" />}
-        />
-        <DayPicker
-          mode="range"
-          selected={range}
-          modifiers={{ booked: bookedDatesForCabin }}
-          modifiersStyles={modifiersStylesDatePicker}
-          disabled={bookedDatesForCabin?.map((date) => ({
-            from: new Date(date),
-            to: new Date(date),
-          }))}
-          // onDayClick={handleDayClick}
-          onSelect={(range) => {
-            setRange(range);
-            setValue(
-              "startDate",
-              range?.from ? format(range?.from, "yyyy-MM-dd") : ""
-            );
-            setValue(
-              "endDate",
-              range?.to ? format(range?.to, "yyyy-MM-dd") : ""
-            );
-          }}
-          footer={<FooterDatePicker range={range} />}
-        />
-      </FormRow>
-
-      <MessageAvailable
-        cabinIdInput={cabinIdInput}
-        startDateInput={startDateInput}
-        endDateInput={endDateInput}
-      />
-
-      {isAvailable ? (
-        <>
-          <FormRow label="Guest Name" error={errors?.guestId?.message}>
+    <>
+      {width >= windowSizes.tablet ? (
+        // For large screen view
+        <Form $type="modal" onSubmit={handleSubmit(onSubmit, onError)}>
+          <FormRow label="Cabin">
             <Controller
-              name="guestId"
+              name="cabinId"
               control={control}
-              rules={bookingValidation.guestId}
+              rules={bookingValidation.cabinId}
               render={({ field }) => (
-                <Select
-                  {...field}
-                  options={guestOptions}
-                  // disabled={isCreating}
-                />
+                <Select {...field} options={cabinOptions} />
               )}
             />
           </FormRow>
 
-          <FormRow label="Number of Guests" error={errors?.numGuests?.message}>
+          <FormRow flex="datepicker" label="Booking dates">
             <Controller
-              name="numGuests"
+              name="startDate"
+              id="startDate"
+              rules={bookingValidation.startDate}
               control={control}
-              rules={bookingValidation.numGuests}
+              render={({ field }) => <input {...field} type="hidden" />}
+            />
+            <Controller
+              name="endDate"
+              id="endDate"
+              rules={bookingValidation.endDate}
+              control={control}
+              render={({ field }) => <input {...field} type="hidden" />}
+            />
+            <DayPicker
+              mode="range"
+              selected={range}
+              modifiers={{ booked: bookedDatesForCabin }}
+              modifiersStyles={modifiersStylesDatePicker}
+              disabled={bookedDatesForCabin?.map((date) => ({
+                from: new Date(date),
+                to: new Date(date),
+              }))}
+              onSelect={(range) => {
+                setRange(range);
+                setValue(
+                  "startDate",
+                  range?.from ? format(range?.from, "yyyy-MM-dd") : ""
+                );
+                setValue(
+                  "endDate",
+                  range?.to ? format(range?.to, "yyyy-MM-dd") : ""
+                );
+              }}
+              footer={<FooterDatePicker range={range} />}
+            />
+          </FormRow>
+
+          <MessageAvailable
+            cabinIdInput={cabinIdInput}
+            startDateInput={startDateInput}
+            endDateInput={endDateInput}
+          />
+
+          {isAvailable && (
+            <>
+              <FormRow label="Guest Name" error={errors?.guestId?.message}>
+                <Controller
+                  name="guestId"
+                  control={control}
+                  rules={bookingValidation.guestId}
+                  render={({ field }) => (
+                    <Select {...field} options={guestOptions} />
+                  )}
+                />
+              </FormRow>
+
+              <FormRow
+                label="Number of Guests"
+                error={errors?.numGuests?.message}
+              >
+                <Controller
+                  name="numGuests"
+                  control={control}
+                  rules={bookingValidation.numGuests}
+                  render={({ field }) => (
+                    <Select {...field} options={numGuestOptions} />
+                  )}
+                />
+              </FormRow>
+
+              <FormRow label="Number of Nights">
+                <Input disabled value={numNightsInput} />
+              </FormRow>
+
+              <FormRow label="Cabin Price">
+                <Input disabled value={formatCurrency(cabinPriceInput)} />
+              </FormRow>
+
+              <FormRow label="Discount">
+                <Input disabled value={formatCurrency(discountInput)} />
+              </FormRow>
+
+              <FormRow label="Extras Price">
+                <Input disabled value={formatCurrency(extrasPriceInput)} />
+              </FormRow>
+
+              <FormRow label="Total Price">
+                <Input disabled value={formatCurrency(totalPriceInput)} />
+              </FormRow>
+
+              <FormRow label="Observations">
+                <Textarea id="observations" {...register("observations")} />
+              </FormRow>
+
+              <FormRowVertical>
+                <Controller
+                  control={control}
+                  name="hasBreakfast"
+                  render={({ field: { onChange, value } }) => (
+                    <Checkbox
+                      id="hasBreakfast"
+                      checked={value}
+                      onChange={(e) => onChange(e.target.checked)}
+                    >
+                      Includes breakfast?
+                    </Checkbox>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name="isPaid"
+                  render={({ field: { onChange, value } }) => (
+                    <Checkbox
+                      id="isPaid"
+                      checked={value}
+                      onChange={(e) => onChange(e.target.checked)}
+                    >
+                      Was paid?
+                    </Checkbox>
+                  )}
+                />
+              </FormRowVertical>
+
+              <FormRow>
+                <ButtonGroup>
+                  <Button
+                    variation="secondary"
+                    type="reset"
+                    onClick={handleReset}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" variation="primary">
+                    Create Booking
+                  </Button>
+                </ButtonGroup>
+              </FormRow>
+            </>
+          )}
+        </Form>
+      ) : (
+        // For smaller screen view
+        <Form $type="modal" onSubmit={handleSubmit(onSubmit, onError)}>
+          <FormRowVertical label="Cabin">
+            <Controller
+              name="cabinId"
+              control={control}
+              rules={bookingValidation.cabinId}
               render={({ field }) => (
-                <Select
-                  {...field}
-                  options={numGuestOptions}
-                  // disabled={isCreating}
-                />
-              )}
-            />
-          </FormRow>
-
-          <FormRow label="Number of Nights">
-            <Input disabled value={numNightsInput} />
-          </FormRow>
-
-          <FormRow label="Cabin Price">
-            <Input disabled value={formatCurrency(cabinPriceInput)} />
-          </FormRow>
-
-          <FormRow label="Discount">
-            <Input disabled value={formatCurrency(discountInput)} />
-          </FormRow>
-
-          <FormRow label="Extras Price">
-            <Input disabled value={formatCurrency(extrasPriceInput)} />
-          </FormRow>
-          <FormRow label="Total Price">
-            <Input disabled value={formatCurrency(totalPriceInput)} />
-          </FormRow>
-          <FormRow label="Observations">
-            <Textarea id="observations" {...register("observations")} />
-          </FormRow>
-          <FormRowVertical>
-            <Controller
-              control={control}
-              name="hasBreakfast"
-              render={({ field: { onChange, value } }) => (
-                <Checkbox
-                  id="hasBreakfast"
-                  // disabled={isCreating}
-                  checked={value}
-                  onChange={(e) => onChange(e.target.checked)}
-                >
-                  Includes breakfast?
-                </Checkbox>
-              )}
-            />
-
-            <Controller
-              control={control}
-              name="isPaid"
-              render={({ field: { onChange, value } }) => (
-                <Checkbox
-                  id="isPaid"
-                  // disabled={isCreating}
-                  checked={value}
-                  onChange={(e) => onChange(e.target.checked)}
-                >
-                  Was paid?
-                </Checkbox>
+                <Select {...field} options={cabinOptions} />
               )}
             />
           </FormRowVertical>
 
-          <FormRow>
-            <ButtonGroup>
-              <Button variation="secondary" type="reset" onClick={handleReset}>
-                Cancel
-              </Button>
-              <Button
-                // disabled={isCreating}
-                type="submit"
-                variation="primary"
+          <FormRowVertical flex="datepicker" label="Booking dates">
+            <Controller
+              name="startDate"
+              id="startDate"
+              rules={bookingValidation.startDate}
+              control={control}
+              render={({ field }) => <input {...field} type="hidden" />}
+            />
+            <Controller
+              name="endDate"
+              id="endDate"
+              rules={bookingValidation.endDate}
+              control={control}
+              render={({ field }) => <input {...field} type="hidden" />}
+            />
+            <DayPicker
+              mode="range"
+              selected={range}
+              modifiers={{ booked: bookedDatesForCabin }}
+              modifiersStyles={modifiersStylesDatePicker}
+              disabled={bookedDatesForCabin?.map((date) => ({
+                from: new Date(date),
+                to: new Date(date),
+              }))}
+              onSelect={(range) => {
+                setRange(range);
+                setValue(
+                  "startDate",
+                  range?.from ? format(range?.from, "yyyy-MM-dd") : ""
+                );
+                setValue(
+                  "endDate",
+                  range?.to ? format(range?.to, "yyyy-MM-dd") : ""
+                );
+              }}
+              footer={<FooterDatePicker range={range} />}
+            />
+          </FormRowVertical>
+
+          <MessageAvailable
+            cabinIdInput={cabinIdInput}
+            startDateInput={startDateInput}
+            endDateInput={endDateInput}
+          />
+
+          {isAvailable && (
+            <>
+              <FormRowVertical
+                label="Guest Name"
+                error={errors?.guestId?.message}
               >
-                Create Booking
-              </Button>
-            </ButtonGroup>
-          </FormRow>
-        </>
-      ) : (
-        <></>
+                <Controller
+                  name="guestId"
+                  control={control}
+                  rules={bookingValidation.guestId}
+                  render={({ field }) => (
+                    <Select {...field} options={guestOptions} />
+                  )}
+                />
+              </FormRowVertical>
+
+              <FormRowVertical
+                label="Number of Guests"
+                error={errors?.numGuests?.message}
+              >
+                <Controller
+                  name="numGuests"
+                  control={control}
+                  rules={bookingValidation.numGuests}
+                  render={({ field }) => (
+                    <Select {...field} options={numGuestOptions} />
+                  )}
+                />
+              </FormRowVertical>
+
+              <FormRowVertical label="Number of Nights">
+                <Input disabled value={numNightsInput} />
+              </FormRowVertical>
+
+              <FormRowVertical label="Cabin Price">
+                <Input disabled value={formatCurrency(cabinPriceInput)} />
+              </FormRowVertical>
+
+              <FormRowVertical label="Discount">
+                <Input disabled value={formatCurrency(discountInput)} />
+              </FormRowVertical>
+
+              <FormRowVertical label="Extras Price">
+                <Input disabled value={formatCurrency(extrasPriceInput)} />
+              </FormRowVertical>
+
+              <FormRowVertical label="Total Price">
+                <Input disabled value={formatCurrency(totalPriceInput)} />
+              </FormRowVertical>
+
+              <FormRowVertical label="Observations">
+                <Textarea id="observations" {...register("observations")} />
+              </FormRowVertical>
+
+              <FormRowVertical>
+                <Controller
+                  control={control}
+                  name="hasBreakfast"
+                  render={({ field: { onChange, value } }) => (
+                    <Checkbox
+                      id="hasBreakfast"
+                      checked={value}
+                      onChange={(e) => onChange(e.target.checked)}
+                    >
+                      Includes breakfast?
+                    </Checkbox>
+                  )}
+                />
+
+                <Controller
+                  control={control}
+                  name="isPaid"
+                  render={({ field: { onChange, value } }) => (
+                    <Checkbox
+                      id="isPaid"
+                      checked={value}
+                      onChange={(e) => onChange(e.target.checked)}
+                    >
+                      Was paid?
+                    </Checkbox>
+                  )}
+                />
+              </FormRowVertical>
+
+              <FormRowVertical>
+                <ButtonGroup>
+                  <Button
+                    variation="secondary"
+                    type="reset"
+                    onClick={handleReset}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" variation="primary">
+                    Create Booking
+                  </Button>
+                </ButtonGroup>
+              </FormRowVertical>
+            </>
+          )}
+        </Form>
       )}
-    </Form>
+    </>
   );
 }
 
