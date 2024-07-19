@@ -5,27 +5,27 @@
 In addition, I have developed a [client-facing website](https://into-the-valley-website.vercel.app/) for this business. [[GitHub].](https://github.com/W-Tania/into-the-valley-website) Both the business app and the client-facing app communicate with the back-end database using RESTful APIs, allowing data about bookings, cabins, and guests to be shared between the apps.
 
 ## Features:
-* **Booking Management**: Create, update, and delete of booking. Filter and sort of existed bookings.
+* **Booking Management**: Create, update, and delete of booking. Filter and sort existed bookings.
 * **Guest Management**: Register, update and delete guest-related information.
-* **Cabin Management**: Create, update, and delete of cabin details and upload photos. Filter and sort of cabins.
+* **Cabin Management**: Create, update, and delete cabin details and upload photos. Filter and sort of cabins.
 * **Dashboard**: Visualized charts and sales for booking information, simplified check-in and check-outs of guests on that day.
-* **User Authentication**: Secure login and authentication system for users. Only existing user(hotel staff) could signup new users. Created user can update account details and reset password.
-* **System Setting**: Configure and customize setting that applies to all bookings with ease.
+* **User Authentication**: Secure login and authentication system for users. Only existing user(hotel staff) could signup new users. Created users can update account details and reset password.
+* **System Setting**: Configure and customize settings that apply to all bookings with ease.
 * **Dark Mode**: Dark mode to follow device.
 * **Responsive design**: Ensure compatibility across devices.
-* **Real-Time Booking Validation**: Prevent doublebooking and check for available timeslot while making bookings.
+* **Real-Time Booking Validation**: Prevent doublebooking and check for available time slots while making bookings.
 
 ## Technology:
-Into the Valley is built using React framework and Supabase as the backend. Providing a modern and scalable architecture. The application is designed with a focus on reusability, scalability, and performance.
+Into the Valley is built using React framework and Supabase as the backend, providing a modern and scalable architecture. The application is designed with a focus on reusability, scalability, and performance.
 
 * **RESTful APIs**: API seamlessly integrated to manager server state and global state.
-* **Supabase**: A open-source Firebase alternative database that utilize the Postgres architecture.
+* **Supabase**: A open-source Firebase alternative database that utilizes the Postgres architecture.
 * **Tanstack React Query**: Used with RESTFUL APIs to manage global and server state with Supabase.
 * **React Hook Form**: Handle form state, validation and submission.
 * **React Router**: Navigation between pages.
 * **Styled Components**: CSS styling solution.
 * **Error Boundary**: Catch errors in the child component tree.
-* **Recharts**: A charting library for display charts and statistics.
+* **Recharts**: A charting library to display charts and statistics.
 * **Framer Motion**: Animation in Modal and form elements.
 * **React day picker**: Calendar library used to select data while make bookings.
 * **Reusable Components**: Designed with reusability in mind, components can be easily integrated and adapted across the application.
@@ -43,5 +43,5 @@ Into the Valley is built using React framework and Supabase as the backend. Prov
 <img width="383" alt="Screenshot 2024-07-19 at 10 42 40 am" src="https://github.com/user-attachments/assets/e321cab1-433f-44e9-b15a-a0f84cb3120b">
 
 ## Preview - Phone & Dark Mode:
-<img width="309" alt="Screenshot 2024-07-19 at 10 46 51 am" src="https://github.com/user-attachments/assets/1ea811ec-af10-406b-8fdd-d9f70a6a9e05">
 <img width="310" alt="Screenshot 2024-07-19 at 10 46 38 am" src="https://github.com/user-attachments/assets/fbc53589-a2b8-439b-bcbc-46b9b1c498a9">
+<img width="309" alt="Screenshot 2024-07-19 at 10 46 51 am" src="https://github.com/user-attachments/assets/1ea811ec-af10-406b-8fdd-d9f70a6a9e05">
